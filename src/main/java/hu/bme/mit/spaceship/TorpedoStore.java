@@ -3,16 +3,21 @@ package hu.bme.mit.spaceship;
 import java.util.Random;
 
 /**
-* Class storing and managing the torpedoes of a ship
+* Tries to fire the given number of torpedoes.
 *
-* (Deliberately contains bugs.)
+* @param numberOfTorpedos number of torpedoes to fire (must be between 1 and the remaining count)
+* @return true if firing was successful, false if the launcher failed
+* @throws IllegalArgumentException if the number is out of range
 */
 public class TorpedoStore {
 
   // rate of failing to fire torpedos [0.0, 1.0]
-  private double FAILURE_RATE = 0.0; //NOSONAR
+  private double failureRate = 0.0; //NOSONAR
 
   private int torpedoCount = 0;
+  private final Random generator = new Random();
+
+
 
   public TorpedoStore(int numberOfTorpedos){
     this.torpedoCount = numberOfTorpedos;
@@ -21,25 +26,25 @@ public class TorpedoStore {
     String failureEnv = System.getenv("IVT_RATE");
     if (failureEnv != null){
       try {
-        FAILURE_RATE = Double.parseDouble(failureEnv);
+        failureRate = Double.parseDouble(failureEnv);
       } catch (NumberFormatException nfe) {
-        FAILURE_RATE = 0.0;
+        failureRate = 0.0;
       }
     }
   }
 
   public boolean fire(int numberOfTorpedos){
     if(numberOfTorpedos < 1 || numberOfTorpedos > this.torpedoCount){
-      new IllegalArgumentException("numberOfTorpedos");
-    }
+  throw new IllegalArgumentException("numberOfTorpedos");
+}
 
     boolean success = false;
 
     // simulate random overheating of the launcher bay which prevents firing
-    Random generator = new Random();
+    
     double r = generator.nextDouble();
 
-    if (r >= FAILURE_RATE) {
+    if (r >= failureRate) {
       // successful firing
       this.torpedoCount =- numberOfTorpedos;
       success = true;
