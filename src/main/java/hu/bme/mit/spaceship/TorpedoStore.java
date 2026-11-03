@@ -3,9 +3,11 @@ package hu.bme.mit.spaceship;
 import java.util.Random;
 
 /**
-* Class storing and managing the torpedoes of a ship
+* Tries to fire the given number of torpedoes.
 *
-* (Deliberately contains bugs.)
+* @param numberOfTorpedos number of torpedoes to fire (must be between 1 and the remaining count)
+* @return true if firing was successful, false if the launcher failed
+* @throws IllegalArgumentException if the number is out of range
 */
 public class TorpedoStore {
 
